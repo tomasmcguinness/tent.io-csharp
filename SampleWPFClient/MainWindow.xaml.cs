@@ -35,11 +35,11 @@ namespace SampleWPFClient
             {
                 Name = "Amazeballs",
                 Description = "Most amazing app ever!",
-                Icon = "http://localhost/icon.png",
-                Uri = "http://localhost"
+                Icon = "http://example.com/icon.png",
+                Uri = "http://example.com"
             };
 
-            request.AddRedirectUri("http://localhost");
+            request.AddRedirectUri("https://example.com/callback");
             request.AddPermissionScope("read_followings", "Need this to do amazeballs things");
 
             client.Register(request);

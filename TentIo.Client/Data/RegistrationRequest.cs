@@ -21,7 +21,7 @@ namespace TentIo.Client.Data
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        [JsonProperty("uri")]
+        [JsonProperty("url")]
         public string Uri { get; set; }
 
         [JsonProperty("icon")]

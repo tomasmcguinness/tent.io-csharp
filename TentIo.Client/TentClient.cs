@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace TentIo.Client
 
         private string ServerUri(string path)
         {
-            return string.Format("https://{0}/{1}", serverName, path);
+            return string.Format("http://{0}/{1}", serverName, path);
         }
 
         /// <summary>
@@ -47,7 +48,11 @@ namespace TentIo.Client
         public async void Register(RegistrationRequest request)
         {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.PostAsJsonAsync(ServerUri("app"), request);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.tent.v0+json"));
+
+            HttpContent body = new ObjectContent(request.GetType(), request, new JsonMediaTypeFormatter(), "application/vnd.tent.v0+json");
+
+            HttpResponseMessage response = await client.PostAsync(ServerUri("apps"), body);
             response.EnsureSuccessStatusCode();
         }
 
