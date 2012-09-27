@@ -7,69 +7,94 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using TentIo.Client.Data;
+using TentIo.Client.Formatters;
 
 namespace TentIo.Client
 {
-    public class TentClient
+  public class TentClient
+  {
+    private string serverName;
+
+    private TentClient(string serverName)
     {
-        private string serverName;
+      this.serverName = serverName;
+    }
 
-        private TentClient(string serverName)
-        {
-            this.serverName = serverName;
-        }
+    private string ServerUri(string path)
+    {
+      return string.Format("http://{0}/{1}", serverName, path);
+    }
 
-        private string ServerUri(string path)
-        {
-            return string.Format("http://{0}/{1}", serverName, path);
-        }
+    /// <summary>
+    /// Returns an instance of a TentClient connected to the target server.
+    /// </summary>
+    /// <param name="serverName"></param>
+    public async static Task<TentClient> Discover(string serverName)
+    {
+      string uri = string.Format("http://{0}", serverName);
+      HttpClient client = new HttpClient();
+      HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Head, new Uri(uri));
+      request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.tent.v0+json"));
+      HttpResponseMessage response = await client.SendAsync(request);
 
-        /// <summary>
-        /// Returns an instance of a TentClient connected to the target server.
-        /// </summary>
-        /// <param name="serverName"></param>
-        public async static Task<TentClient> Discover(string serverName)
-        {
-            string uri = string.Format("http://{0}", serverName);
-            HttpClient client = new HttpClient();
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Head, new Uri(uri));
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.tent.v0+json"));
-            HttpResponseMessage response = await client.SendAsync(request);
+      // Get the profile.
+      //
+      var linkHeaders = response.Headers.Where(h => h.Key == "Link");
 
-            // TODO How do you determine if this is a valid TentServer??
-            //
-            //response.Headers.Where(h => h.Key == "link").Count() >
+      if (linkHeaders.Count() == 0)
+      {
+        return null;
+      }
 
-            response.EnsureSuccessStatusCode();
+      var profile = await GetProfile(string.Format(@"http://{0}/tent/profile", serverName));
 
-            return new TentClient(serverName);
-        }
+      response.EnsureSuccessStatusCode();
 
-        public async void Register(RegistrationRequest request)
-        {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.tent.v0+json"));
+      return new TentClient(serverName);
+    }
 
-            HttpContent body = new ObjectContent(request.GetType(), request, new JsonMediaTypeFormatter(), "application/vnd.tent.v0+json");
+    private static async Task<TentProfile> GetProfile(string profilePath)
+    {
+      HttpClient client = new HttpClient();
+      client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.tent.v0+json"));
+      var response = await client.GetAsync(profilePath);
 
-            HttpResponseMessage response = await client.PostAsync(ServerUri("apps"), body);
-            response.EnsureSuccessStatusCode();
-        }
+      response.EnsureSuccessStatusCode();
 
-        public void Follow(string serverName)
-        {
+      TentProfile profile = await response.Content.ReadAsAsync<TentProfile>(new List<MediaTypeFormatter>() { new TentJsonMediaTypeFormatter() });
 
-        }
+      return profile;
+    }
 
-        public void Unfollow(string serverName)
-        {
+    public async void Register(RegistrationRequest request)
+    {
+      HttpClient client = new HttpClient();
+      client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.tent.v0+json"));
 
-        }
+      HttpContent body = new ObjectContent(request.GetType(), request, new JsonMediaTypeFormatter(), "application/vnd.tent.v0+json");
 
-        public void PostUpdate(string statusUpdate)
-        {
+      HttpResponseMessage response = await client.PostAsync(ServerUri("apps"), body);
+      response.EnsureSuccessStatusCode();
 
-        }
+      var registrationResult = await response.Content.ReadAsAsync<RegistrationResponse>(new List<MediaTypeFormatter>() { new TentJsonMediaTypeFormatter() });
+
 
     }
+
+    public void Follow(string serverName)
+    {
+
+    }
+
+    public void Unfollow(string serverName)
+    {
+
+    }
+
+    public void PostUpdate(string statusUpdate)
+    {
+
+    }
+
+  }
 }

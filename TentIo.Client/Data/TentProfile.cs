@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace TentIo.Client.Data
 {
-  public class RegistrationResponse
+  public class TentProfile
   {
-    [JsonProperty("id")]
-    public string Id { get; set; }
+    [JsonProperty("name")]
+    public string Name { get; set; }
+
+    [JsonProperty("description")]
+    public string Description { get; set; }
   }
 }

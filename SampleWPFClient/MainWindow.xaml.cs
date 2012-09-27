@@ -29,7 +29,7 @@ namespace SampleWPFClient
 
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            TentClient client = await TentClient.Discover("tomas-tent.herokuapp.com");
+          TentClient client = await TentClient.Discover("tomasmcguinness.tent.is");
 
             RegistrationRequest request = new RegistrationRequest()
             {
