@@ -16,7 +16,7 @@ namespace MACHelper
 
       string nonce = new Random().Next().ToString();
 
-      string normalizedString = string.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n", timestamp, nonce, method, uri.PathAndQuery, uri.Host, uri.Port);
+      string normalizedString = string.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n\n", timestamp, nonce, method, uri.PathAndQuery, uri.Host, uri.Port);
 
       HashAlgorithm hashGenerator = null;
 
@@ -27,6 +27,10 @@ namespace MACHelper
       else if (macAlgorithm == "hmac-sha-1")
       {
         hashGenerator = new HMACSHA1(Encoding.ASCII.GetBytes(macKey));
+      }
+      else
+      {
+        throw new InvalidOperationException("Unsupported MAC algorithm");
       }
 
       string hash = System.Convert.ToBase64String(hashGenerator.ComputeHash(Encoding.ASCII.GetBytes(normalizedString)));
