@@ -8,12 +8,11 @@ namespace TentIo.Client.Data
 {
   public class AppAuthenticationDetails
   {
+    public string ApplicationId { get; set; }
     public string AccessToken { get; set; }
-
     public string TokenType { get; set; }
-
-    public string MacAlgorithm { get; set; }
-
     public string MacKey { get; set; }
+    public string MacKeyIdentifier { get; set; }
+    public string MacAlgorithm { get; set; }
   }
 }

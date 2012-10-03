@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using TentIo.Client.Data;
 using TentIo.Client.Formatters;
 
@@ -15,6 +17,7 @@ namespace TentIo.Client
   {
     private string serverName;
     private string apiPath;
+    private AppAuthenticationDetails authenticationDetails;
 
     private TentClient(string serverName, string apiPath)
     {
@@ -102,12 +105,19 @@ namespace TentIo.Client
 
       var registrationResult = await response.Content.ReadAsAsync<RegistrationResponse>(new List<MediaTypeFormatter>() { new TentJsonMediaTypeFormatter() });
 
+      authenticationDetails = new AppAuthenticationDetails()
+      {
+        ApplicationId = registrationResult.Id,
+        MacKey = registrationResult.MacKey,
+        MacAlgorithm = registrationResult.MacAlgorithm,
+        MacKeyIdentifier = registrationResult.MacKeyIdentifier,
+        TokenType = "mac"
+      };
+
       var oauthUrl = new StringBuilder();
       oauthUrl.Append(ServerUri("/oauth/authorize"));
       oauthUrl.AppendFormat("?client_id={0}", registrationResult.Id);
       oauthUrl.AppendFormat("&redirect_uri={0}", request.RedirectUris[0]);
-
-
 
       //oauthUrl.AppendFormat("&scope={0}", "write_posts,write_posts,read_followers");
       //oauthUrl.AppendFormat("&state={0}", new Random().Next());
@@ -117,18 +127,26 @@ namespace TentIo.Client
       return oauthUrl.ToString();
     }
 
-    public async Task<AppAuthenticationDetails> ProcessRegisterCallback(Uri url)
+    public async Task<AppAuthenticationDetails> ProcessRegisterCallback(string url)
     {
+      NameValueCollection qscoll = HttpUtility.ParseQueryString(url);
+
       HttpClient client = new HttpClient();
       client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.tent.v0+json"));
 
       AccessTokenRequest request = new AccessTokenRequest();
-      request.Code = "c54bf24a29b929e1875a3a7c3ce8f031";
+      request.Code = qscoll["code"];
       request.TokenType = "mac"; // Only supported type at present.
+
+      string authorizationUrl = ServerUri(string.Format("apps/{0}/authorizations", authenticationDetails.ApplicationId));
+
+      string authHeader = MACHelper.Helper.GetAuthorizationHeader(authenticationDetails.MacKeyIdentifier, authenticationDetails.MacKey, authenticationDetails.MacAlgorithm, "GET", new Uri(authorizationUrl));
+
+      client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("MAC", authHeader);
 
       HttpContent body = new ObjectContent(request.GetType(), request, new JsonMediaTypeFormatter(), "application/vnd.tent.v0+json");
 
-      HttpResponseMessage response = await client.PostAsync(ServerUri("apps"), body);
+      HttpResponseMessage response = await client.PostAsync(authorizationUrl, body);
       response.EnsureSuccessStatusCode();
 
       var accessTokenResponse = await response.Content.ReadAsAsync<AccessTokenResponse>(new List<MediaTypeFormatter>() { new TentJsonMediaTypeFormatter() });

@@ -35,3 +35,10 @@ Ask for the permissions your application needs, giving the reasons.
 Finally, send your request. If successful, this will return you an authorization url. 
 
     string authorizationRedirectUrl = await client.Register(request);
+
+Open this URL in a browser, either by redirecting to it (if a web app) or by opening an embedded browser if it's a native application. This will request the user to authenticate and then authorize your app.
+
+The Tent server will redirect back to your callback Url. Pass this Url into your TentClient instance to complete authorization.
+
+	AppAuthenticationDetails authDetails = await client.ProcessRegisterCallback(calledUrl);
+

@@ -16,7 +16,7 @@ namespace TentIo.Client.Data
     public string MacAlgorithm { get; set; }
 
     [JsonProperty("mac_key_id")]
-    public string MacKeyId { get; set; }
+    public string MacKeyIdentifier { get; set; }
 
     [JsonProperty("mac_key")]
     public string MacKey { get; set; }

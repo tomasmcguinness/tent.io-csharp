@@ -1,9 +1,17 @@
 ﻿<Window x:Class="SampleWPFClient.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Height="85" Margin="124,98,0,0" VerticalAlignment="Top" Width="284" Click="Button_Click_1"/>
-
-    </Grid>
+        Title="MainWindow" Height="551.737" Width="525">
+  <Grid>
+    <Button Content="Register" HorizontalAlignment="Left" Height="22" Margin="10,36,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click_1"/>
+    <TextBox x:Name="url" HorizontalAlignment="Left" Height="96" Margin="10,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497"/>
+    <Button Content="Exchange Token" HorizontalAlignment="Left" Margin="10,387,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click_2" />
+    <TextBox x:Name="code" HorizontalAlignment="Left" Height="103" Margin="10,247,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497"/>
+    <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497" Height="21" FontWeight="Bold"><Run Language="en-gb" Text="STEP 1: Register the application."/></TextBlock>
+    <TextBlock HorizontalAlignment="Left" Margin="10,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497" FontWeight="Bold"><Run Language="en-gb" Text="STEP 2: Take this callback URL and paste it into your browser."/><LineBreak/><Run Language="en-gb"/></TextBlock>
+    <TextBlock HorizontalAlignment="Left" Margin="10,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497" FontWeight="Bold"><Run Language="en-gb" Text="STEP 3: Authorize the app. When the redirect completes, paste the URL below."/><LineBreak/><Run Language="en-gb"/></TextBlock>
+    <TextBlock HorizontalAlignment="Left" Margin="10,355,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497" FontWeight="Bold"><Run Language="en-gb" Text="STEP 4: Exchange the code for a permanent access token."/><LineBreak/><Run Language="en-gb"/></TextBlock>
+    <TextBlock HorizontalAlignment="Left" Margin="10,422,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497" FontWeight="Bold"><Run Language="en-gb" Text="STEP 5: Record the access token."/><LineBreak/><Run Language="en-gb"/></TextBlock>
+    <TextBox x:Name="accessToken" HorizontalAlignment="Left" Height="23" Margin="10,459,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497"/>
+  </Grid>
 </Window>

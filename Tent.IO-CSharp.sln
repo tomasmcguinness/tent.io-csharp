@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TentIo.Client.Tests", "Tent
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleWPFClient", "SampleWPFClient\SampleWPFClient.csproj", "{C620499B-ECE2-4A7B-AF52-41E1BED3909B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MACHelper", "MACHelper\MACHelper.csproj", "{266F339B-0F82-4FEE-A12E-CF46D743107C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{C620499B-ECE2-4A7B-AF52-41E1BED3909B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C620499B-ECE2-4A7B-AF52-41E1BED3909B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C620499B-ECE2-4A7B-AF52-41E1BED3909B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{266F339B-0F82-4FEE-A12E-CF46D743107C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{266F339B-0F82-4FEE-A12E-CF46D743107C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{266F339B-0F82-4FEE-A12E-CF46D743107C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{266F339B-0F82-4FEE-A12E-CF46D743107C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
