@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\AccessTokenRequest.cs" />
+    <Compile Include="Data\AccessTokenResponse.cs" />
+    <Compile Include="Data\AppAuthenticationDetails.cs" />
     <Compile Include="Data\RegistrationRequest.cs" />
     <Compile Include="Data\RegistrationResponse.cs" />
     <Compile Include="Data\TentProfile.cs" />

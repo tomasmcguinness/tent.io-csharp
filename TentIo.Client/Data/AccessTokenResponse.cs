@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace TentIo.Client.Data
 {
-  internal class RegistrationResponse
+  internal class AccessTokenResponse
   {
-    [JsonProperty("id")]
-    public string Id { get; set; }
+    [JsonProperty("access_token")]
+    public string AccessToken { get; set; }
+
+    [JsonProperty("mac_key")]
+    public string MacKey { get; set; }
 
     [JsonProperty("mac_algorithm")]
     public string MacAlgorithm { get; set; }
 
-    [JsonProperty("mac_key_id")]
-    public string MacKeyId { get; set; }
-
-    [JsonProperty("mac_key")]
-    public string MacKey { get; set; }
+    [JsonProperty("token_type")]
+    public string TokenType { get; set; }
   }
 }
