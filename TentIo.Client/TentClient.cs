@@ -140,7 +140,7 @@ namespace TentIo.Client
 
       string authorizationUrl = ServerUri(string.Format("apps/{0}/authorizations", authenticationDetails.ApplicationId));
 
-      string authHeader = MACHelper.Helper.GetAuthorizationHeader(authenticationDetails.MacKeyIdentifier, authenticationDetails.MacKey, authenticationDetails.MacAlgorithm, "GET", new Uri(authorizationUrl));
+      string authHeader = MACHelper.Helper.GetAuthorizationHeader(authenticationDetails.MacKeyIdentifier, authenticationDetails.MacKey, authenticationDetails.MacAlgorithm, "POST", new Uri(authorizationUrl));
 
       client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("MAC", authHeader);
 

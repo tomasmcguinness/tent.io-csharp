@@ -17,43 +17,44 @@ using TentIo.Client.Data;
 
 namespace SampleWPFClient
 {
-  /// <summary>
-  /// Interaction logic for MainWindow.xaml
-  /// </summary>
-  public partial class MainWindow : Window
-  {
-    private TentClient client;
-
-    public MainWindow()
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
     {
-      InitializeComponent();
+        private TentClient client;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            client = await TentClient.Discover("tomasmcguinness.tent.is");
+
+            RegistrationRequest request = new RegistrationRequest()
+            {
+                Name = "Amazeballs",
+                Description = "Most amazing app ever!",
+                Icon = "http://example.com/icon.png",
+                Uri = "http://example.com"
+            };
+
+            request.AddRedirectUri("https://example.com/callback");
+            request.AddPermissionScope("read_posts", "Need this to do amazeballs things");
+            request.AddPermissionScope("write_posts", "Need this to do amazeballs things");
+            request.AddPermissionScope("read_followers", "Need this to do amazeballs things");
+
+            string redirectUrl = await client.Register(request);
+
+            url.Text = redirectUrl;
+        }
+
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            var output = await client.ProcessRegisterCallback(new Uri(code.Text).Query);
+            accessToken.Text = output.AccessToken;
+        }
     }
-
-    private async void Button_Click_1(object sender, RoutedEventArgs e)
-    {
-      client = await TentClient.Discover("tomasmcguinness.tent.is");
-
-      RegistrationRequest request = new RegistrationRequest()
-      {
-        Name = "Amazeballs",
-        Description = "Most amazing app ever!",
-        Icon = "http://example.com/icon.png",
-        Uri = "http://example.com"
-      };
-
-      request.AddRedirectUri("https://example.com/callback");
-      request.AddPermissionScope("read_posts", "Need this to do amazeballs things");
-      request.AddPermissionScope("write_posts", "Need this to do amazeballs things");
-      request.AddPermissionScope("read_followers", "Need this to do amazeballs things");
-
-      string redirectUrl = await client.Register(request);
-
-      url.Text = redirectUrl;
-    }
-
-    private async void Button_Click_2(object sender, RoutedEventArgs e)
-    {
-      var output = await client.ProcessRegisterCallback(new Uri(code.Text).Query);
-    }
-  }
 }
