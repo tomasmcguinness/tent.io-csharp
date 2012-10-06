@@ -31,24 +31,36 @@ namespace SampleWPFClient
 
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            client = await TentClient.Discover("tomasmcguinness.tent.is");
-
-            RegistrationRequest request = new RegistrationRequest()
+            AppAuthenticationDetails auth = new AppAuthenticationDetails()
             {
-                Name = "Amazeballs",
-                Description = "Most amazing app ever!",
-                Icon = "http://example.com/icon.png",
-                Uri = "http://example.com"
+                AccessToken = "u:2eed4d61",
+                MacAlgorithm = "hmac-sha-256",
+                MacKey = "46832ba535c87f3ac4e2a5d8d7b98ae0",
+                TokenType = "mac"
             };
 
-            request.AddRedirectUri("https://example.com/callback");
-            request.AddPermissionScope("read_posts", "Need this to do amazeballs things");
-            request.AddPermissionScope("write_posts", "Need this to do amazeballs things");
-            request.AddPermissionScope("read_followers", "Need this to do amazeballs things");
+            client = await TentClient.Connect("tomasmcguinness.tent.is", auth);
 
-            string redirectUrl = await client.Register(request);
+            var posts = await client.GetPosts();
 
-            url.Text = redirectUrl;
+            //client = await TentClient.Discover("tomasmcguinness.tent.is");
+
+            //RegistrationRequest request = new RegistrationRequest()
+            //{
+            //    Name = "Amazeballs",
+            //    Description = "Most amazing app ever!",
+            //    Icon = "http://example.com/icon.png",
+            //    Uri = "http://example.com"
+            //};
+
+            //request.AddRedirectUri("https://example.com/callback");
+            //request.AddPermissionScope("read_posts", "Need this to do amazeballs things");
+            //request.AddPermissionScope("write_posts", "Need this to do amazeballs things");
+            //request.AddPermissionScope("read_followers", "Need this to do amazeballs things");
+
+            //string redirectUrl = await client.Register(request);
+
+            //url.Text = redirectUrl;
         }
 
         private async void Button_Click_2(object sender, RoutedEventArgs e)
