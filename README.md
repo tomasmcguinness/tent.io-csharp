@@ -4,13 +4,13 @@ TentClient is a library written in C# that provides a simple API for the tent.io
 
 ## Technical Bits
 
-To get started, you must create an instance of the client by performing basic discovery
-
-    TentClient client = await TentClient.Discover("tomasmcguinness.tent.is");
+To get started, you must first register an application. Registering an application is outlined in the Tent.io documentation [http://tent.io/docs/app-auth](http://tent.io/docs/app-auth). Performing this step is necssary.
 
 ## Registering a new application
 
-According to the tent.io documentation, all applications must first be registered before they can authenticate and be granted permission to a user's tent server. 
+To begin the registration process, first get an instance of TentClient using the name of the Tent server.
+
+	TentClient client = await TentClient.Discover("tomasmcguinness.tent.is");
 
 First, prepare a registration request.
 
@@ -42,3 +42,26 @@ The Tent server will redirect back to your callback Url. Pass this Url into your
 
 	AppAuthenticationDetails authDetails = await client.ProcessRegisterCallback(calledUrl);
 
+Having obtained the AppAuthenticationDetails, you should persist the values as one of them is the AccessToken needed to perform any actions against.
+
+## Accessing data after registering
+
+Using the AppAuthenticationDetails, you can re-create a TentClient at any point
+
+    AppAuthenticationDetails auth = new AppAuthenticationDetails()
+    {
+        AccessToken = "u:xxxxxx",
+        MacAlgorithm = "hmac-sha-256",
+        MacKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        TokenType = "mac"
+    };
+
+    TentClient client = await TentClient.Connect("tomasmcguinness.tent.is", auth);
+
+Using the AppAuthenticationDetails means this client can perform all of the actions that you requested when the application was registered e.g. read_posts, write_posts etc.
+
+To read posts
+
+    var posts = await client.GetPosts();
+
+At present, this a list of posts, but the data contained is only the ID.
