@@ -198,6 +198,24 @@ namespace TentIo.Client
             return posts;
         }
 
+        public async Task<List<Follower>> GetFollowers()
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.tent.v0+json"));
+
+            string postsUrl = ServerUri("followers");
+
+            string authHeader = MACHelper.Helper.GetAuthorizationHeader(authenticationDetails.MacKeyIdentifier, authenticationDetails.MacKey, authenticationDetails.MacAlgorithm, "GET", new Uri(postsUrl));
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("MAC", authHeader);
+
+            HttpResponseMessage response = await client.GetAsync(postsUrl);
+            response.EnsureSuccessStatusCode();
+
+            var followers = await response.Content.ReadAsAsync<List<Follower>>(new List<MediaTypeFormatter>() { new TentJsonMediaTypeFormatter() });
+            return followers;
+        }
+
         public void Follow(string serverName)
         {
 
