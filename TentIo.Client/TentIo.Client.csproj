@@ -54,6 +54,7 @@
     <Compile Include="Data\RegistrationRequest.cs" />
     <Compile Include="Data\RegistrationResponse.cs" />
     <Compile Include="Data\TentProfile.cs" />
+    <Compile Include="Data\Follower.cs" />
     <Compile Include="Formatters\TentJsonMediaTypeFormatter.cs" />
     <Compile Include="PostTypes\Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
