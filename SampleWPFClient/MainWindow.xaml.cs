@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,56 +21,67 @@ using TentIo.Client.Data;
 
 namespace SampleWPFClient
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+  /// <summary>
+  /// Interaction logic for MainWindow.xaml
+  /// </summary>
+  public partial class MainWindow : Window
+  {
+    private TentClient client;
+
+    public MainWindow()
     {
-        private TentClient client;
-
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-
-        private async void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            AppAuthenticationDetails auth = new AppAuthenticationDetails()
-            {
-                AccessToken = "u:2eed4d61",
-                MacAlgorithm = "hmac-sha-256",
-                MacKey = "46832ba535c87f3ac4e2a5d8d7b98ae0",
-                TokenType = "mac"
-            };
-
-            client = await TentClient.Connect("tomasmcguinness.tent.is", auth);
-
-            var posts = await client.GetPosts();
-
-            //client = await TentClient.Discover("tomasmcguinness.tent.is");
-
-            //RegistrationRequest request = new RegistrationRequest()
-            //{
-            //    Name = "Amazeballs",
-            //    Description = "Most amazing app ever!",
-            //    Icon = "http://example.com/icon.png",
-            //    Uri = "http://example.com"
-            //};
-
-            //request.AddRedirectUri("https://example.com/callback");
-            //request.AddPermissionScope("read_posts", "Need this to do amazeballs things");
-            //request.AddPermissionScope("write_posts", "Need this to do amazeballs things");
-            //request.AddPermissionScope("read_followers", "Need this to do amazeballs things");
-
-            //string redirectUrl = await client.Register(request);
-
-            //url.Text = redirectUrl;
-        }
-
-        private async void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            var output = await client.ProcessRegisterCallback(new Uri(code.Text).Query);
-            accessToken.Text = output.AccessToken;
-        }
+      InitializeComponent();
     }
+
+    private async void btnAuthorize_Click(object sender, RoutedEventArgs e)
+    {
+      client = await TentClient.Discover("tomasmcguinness.tent.is");
+
+      RegistrationRequest request = new RegistrationRequest()
+      {
+        Name = "Amazeballs",
+        Description = "Most amazing app ever!",
+        Icon = "http://example.com/icon.png",
+        Uri = "http://example.com"
+      };
+
+      request.AddRedirectUri("https://example.com/callback");
+      request.AddPermissionScope("read_posts", "Need this to do amazeballs things");
+      request.AddPermissionScope("write_posts", "Need this to do amazeballs things");
+      request.AddPermissionScope("read_followers", "Need this to do amazeballs things");
+
+      string redirectUrl = await client.Register(request);
+
+      browser.Navigate(redirectUrl);
+      browser.Visibility = System.Windows.Visibility.Visible;
+      browser.Navigated += browser_Navigated;
+    }
+
+    async void browser_Navigated(object sender, NavigationEventArgs e)
+    {
+      Debug.WriteLine("Connecting to [{0}]", e.Uri.ToString());
+
+      if (e.Uri.Host == "example.com")
+      {
+        var output = await client.ProcessRegisterCallback(e.Uri.Query);
+
+        var settings = new Dictionary<string, object>();
+        settings.Add("accessToken", output.AccessToken);
+        settings.Add("macKey", output.MacKey);
+        settings.Add("macKeyIdentifier", output.MacKeyIdentifier);
+        settings.Add("tokenType", output.TokenType);
+
+        BinaryFormatter formatter = new BinaryFormatter();
+        var store = IsolatedStorageFile.GetUserStoreForAssembly();
+
+        using (var stream = store.OpenFile("authorization.cfg", FileMode.OpenOrCreate, FileAccess.Write))
+        {
+          formatter.Serialize(stream, settings);
+        }
+
+        browser.Visibility = System.Windows.Visibility.Collapsed;
+      
+      }
+    }
+  }
 }

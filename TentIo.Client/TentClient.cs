@@ -141,8 +141,8 @@ namespace TentIo.Client
 
             oauthUrl.AppendFormat("&scope={0}", "write_posts,read_posts,read_followers");
             //oauthUrl.AppendFormat("&state={0}", new Random().Next());
-            oauthUrl.AppendFormat("&tent_profile_info_types={0}", "https://tent.io/types/info/music/v0.1.0");
-            oauthUrl.AppendFormat("&tent_post_types={0}", "https://tent.io/types/posts/status/v0.1.0");
+            //oauthUrl.AppendFormat("&tent_profile_info_types={0}", "https://tent.io/types/info/music/v0.1.0");
+            //oauthUrl.AppendFormat("&tent_post_types={0}", "https://tent.io/types/posts/status/v0.1.0");
 
             return oauthUrl.ToString();
         }
