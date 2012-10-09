@@ -39,18 +39,22 @@ namespace TentIo.Client
         }
 
         /// <summary>
-        /// Returns an instance of a TentClient connected to the target server.
+        /// Returns an instance of a TentClient connected to the target server. Use this method if your app has not already authenticated.
         /// </summary>
         /// <param name="serverName"></param>
-        public async static Task<TentClient> Discover(string serverName)
+        public async static Task<TentClient> Connect(string serverName)
         {
             string apiPath = await GetApiPath(serverName);
             var profile = await GetProfile(string.Format(@"https://{0}/{1}/profile", serverName, apiPath));
             return new TentClient(serverName, apiPath);
         }
 
-
-
+        /// <summary>
+        /// Returns an instance of a TentClient connected and authorized to the target server.
+        /// </summary>
+        /// <param name="serverName"></param>
+        /// <param name="authDetails"></param>
+        /// <returns></returns>
         public async static Task<TentClient> Connect(string serverName, AppAuthenticationDetails authDetails)
         {
             string apiPath = await GetApiPath(serverName);
