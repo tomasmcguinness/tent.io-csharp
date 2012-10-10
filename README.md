@@ -10,7 +10,7 @@ To get started, you must first register an application. Registering an applicati
 
 To begin the registration process, first get an instance of TentClient using the name of the Tent server.
 
-	TentClient client = await TentClient.Discover("tomasmcguinness.tent.is");
+	TentClient client = await TentClient.Connect("tomasmcguinness.tent.is");
 
 First, prepare a registration request.
 
@@ -42,11 +42,11 @@ The Tent server will redirect back to your callback Url. Pass this Url into your
 
 	AppAuthenticationDetails authDetails = await client.ProcessRegisterCallback(calledUrl);
 
-Having obtained the AppAuthenticationDetails, you should persist the values as one of them is the AccessToken needed to perform any actions against.
+Having obtained the AppAuthenticationDetails, you should persist these values as one of them is the AccessToken needed to perform any actions against.
 
 ## Accessing data after registering
 
-Using the AppAuthenticationDetails, you can re-create a TentClient at any point
+Using the AppAuthenticationDetails that you obtained during registration, you can re-create a TentClient at any point
 
     AppAuthenticationDetails auth = new AppAuthenticationDetails()
     {
