@@ -30,9 +30,9 @@ namespace SampleWPFClient.ViewModels
         {
             AppAuthenticationDetails authDetails = new AppAuthenticationDetails()
             {
-                AccessToken = "x:xxxxxxxx",
+                AccessToken = "u:2eed4d61",
                 MacAlgorithm = "hmac-sha-256",
-                MacKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                MacKey = "46832ba535c87f3ac4e2a5d8d7b98ae0",
                 TokenType = "mac"
             };
 

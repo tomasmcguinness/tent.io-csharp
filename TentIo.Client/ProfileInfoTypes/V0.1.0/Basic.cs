@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TentIo.Client.ProfileInfoTypes.V0._1._0
 {
-    public class Basic
+    public class Basic : ProfileInfo
     {
         public string Name { get; set; }
         public string AvatarUrl { get; set; }

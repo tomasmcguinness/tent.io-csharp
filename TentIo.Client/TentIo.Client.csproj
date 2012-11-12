@@ -56,11 +56,12 @@
     <Compile Include="Data\TentProfile.cs" />
     <Compile Include="Data\Follower.cs" />
     <Compile Include="Formatters\TentJsonMediaTypeFormatter.cs" />
+    <Compile Include="ProfileInfoTypes\ProfileInfo.cs" />
     <Compile Include="ProfileInfoTypes\V0.1.0\Basic.cs" />
-    <Compile Include="ProfileInfoTypes\Post.cs" />
+    <Compile Include="PostTypes\Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TentClient.cs" />
-    <Compile Include="ProfileInfoTypes\TentEntity.cs" />
+    <Compile Include="TentEntity.cs" />
     <Compile Include="ProfileInfoTypes\V0.1.0\Core.cs" />
   </ItemGroup>
   <ItemGroup>

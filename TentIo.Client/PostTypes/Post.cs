@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 
 namespace TentIo.Client.PostTypes
 {
-    public class Post
+    public abstract class Post : TentEntity
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
     }
 }
